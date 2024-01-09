@@ -9,6 +9,8 @@ import config from "./tamagui.config";
 import Constants from "expo-constants";
 import { useFonts } from "expo-font";
 import Prediccion from "./src/ui/prediccion";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 export default function App() {
   const colorScheme = useColorScheme();
@@ -38,15 +40,25 @@ export default function App() {
   });
 
   if (!loaded) return null;
+  const Stack = createNativeStackNavigator();
 
   return (
     <>
       <StatusBar style="auto" />
       <TamaguiProvider config={config}>
-        <Theme name={colorScheme === "light" ? "light_green" : "dark_green"}>
+        <Theme name={colorScheme === "light" ? "light_pink" : "dark_pink"}>
           <SafeAreaView style={styles.container}>
             {/* <Otra /> */}
-            <Prediccion></Prediccion>
+
+            <NavigationContainer>
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="prediccion"
+                  component={Prediccion}
+                ></Stack.Screen>
+                <Stack.Screen name="home" component={Otra}></Stack.Screen>
+              </Stack.Navigator>
+            </NavigationContainer>
           </SafeAreaView>
         </Theme>
       </TamaguiProvider>
@@ -56,7 +68,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Constants.statusBarHeight,
     flexGrow: 1,
   },
 });

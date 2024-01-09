@@ -49,13 +49,14 @@ export default function Prediccion() {
             <YStack space>
               <YStack>
                 <XStack alignItems="center" space="$4">
-                  <Label theme="light_green" w={"70%"} htmlFor="fruto">
+                  <Label theme="light_pink" htmlFor="fruto">
                     <H5>Numero de Fruto</H5>
                   </Label>
                   <Input
                     onChangeText={handleChange("fruto")}
                     //value={values.fruto.toString()}
                     keyboardType="numeric"
+                    theme="light_pink_Input"
                     flex={1}
                     id="Fruto"
                   />
@@ -63,10 +64,11 @@ export default function Prediccion() {
               </YStack>
               <YStack>
                 <XStack alignItems="center" space="$4">
-                  <Label theme="light_green" w={"70%"} htmlFor="severidad">
+                  <Label theme="light_pink" htmlFor="severidad">
                     <H5>Numero de Severidad</H5>
                   </Label>
                   <Input
+                    theme="light_pink_Input"
                     onChangeText={handleChange("severidad")}
                     //value={values.severidad.toString()}
                     keyboardType="numeric"
@@ -91,12 +93,12 @@ export default function Prediccion() {
 
               <YStack>
                 <XStack alignItems="center" space="$4">
-                  {incidencia != null? (
+                  {incidencia != null ? (
                     <RecomendacionCard
                       incidencia={incidencia}
                       recomendacion={recomendacion}
                     ></RecomendacionCard>
-                  ):null}
+                  ) : null}
                 </XStack>
               </YStack>
             </YStack>
@@ -114,5 +116,6 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#ECADD4",
   },
 });
