@@ -13,60 +13,96 @@ import {
 import { createApiCourseRepository } from "../infrastructure/ApiPrediccionRepository";
 import { PrediccionRepository } from "../domain/PrediccionRepository";
 import { getPrediccion } from "../application/getPrediccion";
+import { RecomendacionCard } from "./recomendacion";
+import { useState } from "react";
+import { Formik } from "formik";
 
 export default function Prediccion() {
+  const [incidencia, setIncidencia] = useState(null);
+  const [recomendacion, setRecomendacion] = useState(null);
   const repository: PrediccionRepository = createApiCourseRepository();
-  const fetchGetPrediccion = async () => {
-    const response = await getPrediccion(repository, 3, 20).then((data) => {
-      console.log(data);
-    });
+  const fetchGetPrediccion = async (fruto: number, severidad: number) => {
+    const response = await getPrediccion(repository, fruto, severidad).then(
+      (data) => {
+        if (data.incidencia == 1) {
+          setRecomendacion(
+            "Tus plantaciones estan en peligro, toma las debidas precauciones"
+          );
+        } else {
+          setRecomendacion("Tus plantaciones estan a salvo");
+        }
+        setIncidencia(data.incidencia);
+      }
+    );
   };
 
   return (
     <View style={styles.container}>
-      <Form
-        onSubmit={() => {
-          fetchGetPrediccion();
-        }}
-        space
-        w={"80%"}
+      <Formik
+        initialValues={{ fruto: "", severidad: "" }}
+        onSubmit={(values) =>
+          fetchGetPrediccion(parseInt(values.fruto), parseInt(values.severidad))
+        }
       >
-        <YStack space>
-          <YStack>
-            <XStack alignItems="center" space="$4">
-              <Label theme="light_green" w={"70%"} htmlFor="fruto">
-                <H5>Numero de Fruto</H5>
-              </Label>
-              <Input keyboardType="numeric" flex={1} id="Fruto" />
-            </XStack>
-          </YStack>
-          <YStack>
-            <XStack alignItems="center" space="$4">
-              <Label theme="light_green" w={"70%"} htmlFor="severidad">
-                <H5>Numero de Severidad</H5>
-              </Label>
-              <Input keyboardType="numeric" flex={1} id="severidad" />
-            </XStack>
-          </YStack>
-          <YStack>
-            <XStack alignItems="center" space="$4">
-              <H5></H5>
-            </XStack>
-          </YStack>
-          <YStack>
-            <Form.Trigger asChild>
-              <Button
-                theme="active"
-                m={"auto"}
-                w={"60%"}
-                onPress={() => console.log("Botón presionado")}
-              >
-                Calcular Incidencia
-              </Button>
-            </Form.Trigger>
-          </YStack>
-        </YStack>
-      </Form>
+        {({ handleChange, handleBlur, handleSubmit, values }) => (
+          <Form onSubmit={() => {}} space w={"80%"}>
+            <YStack space>
+              <YStack>
+                <XStack alignItems="center" space="$4">
+                  <Label theme="light_green" w={"70%"} htmlFor="fruto">
+                    <H5>Numero de Fruto</H5>
+                  </Label>
+                  <Input
+                    onChangeText={handleChange("fruto")}
+                    //value={values.fruto.toString()}
+                    keyboardType="numeric"
+                    flex={1}
+                    id="Fruto"
+                  />
+                </XStack>
+              </YStack>
+              <YStack>
+                <XStack alignItems="center" space="$4">
+                  <Label theme="light_green" w={"70%"} htmlFor="severidad">
+                    <H5>Numero de Severidad</H5>
+                  </Label>
+                  <Input
+                    onChangeText={handleChange("severidad")}
+                    //value={values.severidad.toString()}
+                    keyboardType="numeric"
+                    flex={1}
+                    id="severidad"
+                  />
+                </XStack>
+              </YStack>
+
+              <YStack>
+                <Form.Trigger asChild>
+                  <Button
+                    theme="active"
+                    m={"auto"}
+                    w={"60%"}
+                    onPress={() => handleSubmit()}
+                  >
+                    Calcular Incidencia
+                  </Button>
+                </Form.Trigger>
+              </YStack>
+
+              <YStack>
+                <XStack alignItems="center" space="$4">
+                  {incidencia != null? (
+                    <RecomendacionCard
+                      incidencia={incidencia}
+                      recomendacion={recomendacion}
+                    ></RecomendacionCard>
+                  ):null}
+                </XStack>
+              </YStack>
+            </YStack>
+          </Form>
+        )}
+      </Formik>
     </View>
   );
 }

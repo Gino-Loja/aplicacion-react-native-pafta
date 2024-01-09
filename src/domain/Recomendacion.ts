@@ -1,4 +1,4 @@
 export interface Recomendacion {
-	titulo: string;
+	incidencia: number;
     recomendacion:string
 }
