@@ -26,10 +26,10 @@ export default function Prediccion() {
       (data) => {
         if (data.incidencia == 1) {
           setRecomendacion(
-            "Tus plantaciones estan en peligro, toma las debidas precauciones"
+            "Asegúrate de tomar las precauciones necesarias porque tus cultivos están en riesgo"
           );
         } else {
-          setRecomendacion("Tus plantaciones estan a salvo");
+          setRecomendacion("Las plantaciones que posees se encuentran en un estado seguro");
         }
         setIncidencia(data.incidencia);
       }
